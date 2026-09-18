@@ -17,6 +17,7 @@ import streamlit as st
 from core.conversation import Session
 from core.render import to_json_string, to_markdown
 from core.retrieve import kb_is_ready, kb_stats, search
+from knowledge.ingest import build
 from core.schema import CORE_ENV_METRICS
 
 st.set_page_config(page_title="Darukaa.Earth Biodiversity Intelligence", layout="wide")
@@ -50,8 +51,9 @@ def main() -> None:
     )
 
     if not kb_is_ready():
-        st.error("Knowledge base not built. Run `python -m knowledge.ingest` and reload.")
-        st.stop()
+        with st.spinner("Building the scientific knowledge base for the first run..."):
+            build()
+        st.rerun()
 
     session = get_session()
 
