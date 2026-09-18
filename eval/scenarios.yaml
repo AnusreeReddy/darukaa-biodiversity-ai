@@ -1,0 +1,154 @@
+# Evaluation scenarios.
+#
+# Each scenario runs the full pipeline (extract -> classify -> reason ->
+# retrieve -> render) and asserts properties of the output. These are
+# behavioural assertions about the system, not measurements of ecological
+# outcomes, and the report states that explicitly.
+#
+# Assertion keys:
+#   expect_mode                  clarify | recommend
+#   min_variables                minimum core variables the state must hold
+#   expect_classifications       metric -> required classification
+#   expect_recommendations       intervention_ids that must appear
+#   forbid_recommendations       intervention_ids that must NOT appear
+#   expect_top                   intervention_id that must rank first
+#   min_multi_metric             every recommendation must combine >= N variables
+#   require_evidence             every recommendation must carry >= 1 passage
+#   expect_questions_about       clarifying questions must target these metrics
+
+scenarios:
+
+  - id: challenge_example_semi_arid_wheat
+    description: "The worked example from the challenge brief: degraded semi-arid monoculture wheat."
+    turns:
+      - "Soil organic carbon is 0.3%, rainfall is low, I grow monoculture wheat in a semi-arid region, mean temperature 28 C."
+    assertions:
+      expect_mode: recommend
+      min_variables: 4
+      expect_classifications:
+        soil_organic_carbon: critically_low
+        rainfall: semi_arid
+        land_use: monoculture_cropland
+        temperature: hot
+      expect_recommendations: [gate_dryland_water, action_agroforestry]
+      expect_top: gate_dryland_water
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: acid_soil_blocks_legumes
+    description: "Acid soil must suppress the legume cover-crop recommendation and surface liming first. This is the clearest test of gated, non-obvious reasoning."
+    turns:
+      - "pH is 5.1, SOC 0.8%, monoculture maize, rainfall 900mm, biodiversity declining."
+    assertions:
+      expect_mode: recommend
+      min_variables: 5
+      expect_classifications:
+        soil_ph: strongly_acidic
+        soil_organic_carbon: very_low
+      expect_recommendations: [gate_acid_soil]
+      forbid_recommendations: [action_legume_cover_crop]
+      expect_top: gate_acid_soil
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: neutral_ph_allows_legumes
+    description: "Control for the previous scenario: with pH corrected, the legume recommendation should return."
+    turns:
+      - "pH is 6.8, SOC 0.8%, monoculture maize, rainfall 900mm, biodiversity declining."
+    assertions:
+      expect_mode: recommend
+      expect_recommendations: [action_legume_cover_crop]
+      forbid_recommendations: [gate_acid_soil]
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: pollution_gate_precedes_habitat
+    description: "Heavy chemical pressure must be addressed before habitat creation is presented as the answer."
+    turns:
+      - "We spray insecticide weekly, biodiversity is declining, no field margins, monoculture cotton, SOC 1.1%."
+    assertions:
+      expect_mode: recommend
+      expect_classifications:
+        pollution: high
+        habitat_diversity: very_low
+      expect_recommendations: [gate_pollution, action_habitat_strips]
+      expect_top: gate_pollution
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: deforestation_triggers_connectivity
+    description: "Recent clearance should produce a connectivity recommendation, which is distinct from simply adding habitat area."
+    turns:
+      - "We cleared about 40% of the tree cover three years ago. Species richness is low, habitat diversity is low, the land is grazing land, rainfall 700mm."
+    assertions:
+      expect_mode: recommend
+      expect_classifications:
+        deforestation: high
+      expect_recommendations: [action_connectivity]
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: insufficient_data_asks_questions
+    description: "A single-variable opening message must produce targeted clarifying questions, not advice."
+    turns:
+      - "Biodiversity is declining on my land."
+    assertions:
+      expect_mode: clarify
+      expect_questions_about: [soil_organic_carbon, land_use, habitat_diversity, pollution]
+      forbid_recommendations: [action_agroforestry, action_legume_cover_crop]
+
+  - id: multi_turn_memory_accumulates
+    description: "Variables supplied across separate turns must accumulate into one state and produce a grounded answer."
+    turns:
+      - "Biodiversity is declining on my land."
+      - "The soil organic carbon is 0.4%."
+      - "It is monoculture wheat, rainfall about 380mm."
+    assertions:
+      expect_mode: recommend
+      min_variables: 4
+      expect_classifications:
+        soil_organic_carbon: critically_low
+        rainfall: semi_arid
+      expect_recommendations: [action_agroforestry]
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: correction_revises_diagnosis
+    description: "A corrected value must overwrite the earlier one and change the recommendation set."
+    turns:
+      - "pH 5.0, SOC 0.7%, monoculture wheat, rainfall 850mm, biodiversity low."
+      - "Sorry, I misread the meter - the pH is actually 6.9."
+    assertions:
+      expect_mode: recommend
+      expect_classifications:
+        soil_ph: near_neutral
+      expect_recommendations: [action_legume_cover_crop]
+      forbid_recommendations: [gate_acid_soil]
+      require_evidence: true
+
+  - id: structured_json_input
+    description: "Structured JSON input must be parsed into the same state representation as free text."
+    turns:
+      - '{"soil_ph": 6.4, "soc": 0.9, "rainfall": 380, "land_use": "monoculture wheat", "pollution": "high", "species_richness": "low", "temperature": 29}'
+    assertions:
+      expect_mode: recommend
+      min_variables: 6
+      expect_classifications:
+        soil_ph: moderately_acidic
+        soil_organic_carbon: very_low
+        rainfall: semi_arid
+        pollution: high
+      expect_recommendations: [gate_pollution]
+      min_multi_metric: 3
+      require_evidence: true
+
+  - id: grazing_land_pathway
+    description: "Grazing land must route to stocking and rest-period management rather than cropland interventions."
+    turns:
+      - "Rangeland grazing, SOC 1.2%, species richness low, rainfall 420mm, soil is dry."
+    assertions:
+      expect_mode: recommend
+      expect_recommendations: [action_grazing]
+      forbid_recommendations: [action_legume_cover_crop, action_rotation]
+      min_multi_metric: 3
+      require_evidence: true

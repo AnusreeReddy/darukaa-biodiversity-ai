@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build knowledge base
+        run: python -m knowledge.ingest
+
+      - name: Run unit tests
+        run: pytest -q
+
+      - name: Run scenario evaluation
+        run: python -m eval.run_eval --markdown eval/REPORT.md
+
+      - name: Verify the app imports cleanly
+        run: python -c "import app; print('app OK')"
+
+      - name: Upload evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report-py${{ matrix.python-version }}
+          path: eval/REPORT.md

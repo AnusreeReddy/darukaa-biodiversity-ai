@@ -1,0 +1,220 @@
+{
+  "_description": "Structured environmental reference layer. Each band converts a raw measurement into an interpretable class used by the reasoning engine. Bands are inclusive of 'min' and exclusive of 'max'.",
+  "_note_on_sources": "Thresholds follow widely used agronomic and soil-survey conventions (FAO Guidelines for Soil Description / World Reference Base pH classes; FAO-ITPS Status of the World's Soil Resources for SOC degradation context; UNEP aridity index classes as used in IPCC SRCCL Chapter 3). They are interpretive bands, not measurements.",
+
+  "soil_ph": {
+    "unit": "pH",
+    "reference": "FAO Guidelines for Soil Description, 4th ed. (2006), soil reaction classes",
+    "source_id": "fao_soil_desc_2006",
+    "bands": [
+      {"class": "ultra_acidic", "min": 0.0, "max": 3.5, "interpretation": "Extreme acidity; aluminium and manganese toxicity almost certain."},
+      {"class": "extremely_acidic", "min": 3.5, "max": 4.5, "interpretation": "Severe aluminium toxicity, phosphorus strongly fixed, rhizobia inhibited."},
+      {"class": "strongly_acidic", "min": 4.5, "max": 5.5, "interpretation": "Aluminium becomes soluble, phosphorus availability falls, legume nodulation impaired."},
+      {"class": "moderately_acidic", "min": 5.5, "max": 6.5, "interpretation": "Slightly sub-optimal for most crops but workable; micronutrients well available."},
+      {"class": "near_neutral", "min": 6.5, "max": 7.5, "interpretation": "Optimal range for nutrient availability and microbial activity."},
+      {"class": "moderately_alkaline", "min": 7.5, "max": 8.5, "interpretation": "Iron, zinc and phosphorus availability declining; possible carbonate soils."},
+      {"class": "strongly_alkaline", "min": 8.5, "max": 14.0, "interpretation": "Probable sodicity; structural degradation and poor infiltration likely."}
+    ]
+  },
+
+  "soil_organic_carbon": {
+    "unit": "%",
+    "reference": "Common agronomic interpretation bands for topsoil SOC; the 2% threshold is widely cited as a soil-quality warning level, and FAO-ITPS identifies SOC loss as a principal global soil degradation process.",
+    "source_id": "fao_swsr_2015",
+    "bands": [
+      {"class": "critically_low", "min": 0.0, "max": 0.5, "interpretation": "Severely depleted; aggregate stability, water holding capacity and microbial habitat all compromised."},
+      {"class": "very_low", "min": 0.5, "max": 1.0, "interpretation": "Depleted topsoil typical of long-term intensive tillage with residue removal."},
+      {"class": "low", "min": 1.0, "max": 2.0, "interpretation": "Below the commonly cited 2% soil-quality warning level; structure and nutrient cycling impaired."},
+      {"class": "moderate", "min": 2.0, "max": 3.5, "interpretation": "Functional range for most arable soils."},
+      {"class": "good", "min": 3.5, "max": 6.0, "interpretation": "Well-supplied; strong aggregate stability and biological activity."},
+      {"class": "very_high", "min": 6.0, "max": 100.0, "interpretation": "Organic or peaty soil, or long-term grassland/forest topsoil."}
+    ]
+  },
+
+  "soil_moisture": {
+    "unit": "% VWC",
+    "reference": "Volumetric water content bands, interpreted relative to typical medium-textured soil field capacity (~25-35% VWC).",
+    "source_id": "internal_reference",
+    "bands": [
+      {"class": "very_dry", "min": 0.0, "max": 10.0, "interpretation": "At or below wilting point for most textures; biological activity largely suspended."},
+      {"class": "dry", "min": 10.0, "max": 18.0, "interpretation": "Plant water stress likely during the growing season."},
+      {"class": "adequate", "min": 18.0, "max": 30.0, "interpretation": "Near field capacity for medium-textured soils."},
+      {"class": "wet", "min": 30.0, "max": 45.0, "interpretation": "Above field capacity; intermittent anaerobic conditions possible."},
+      {"class": "saturated", "min": 45.0, "max": 100.0, "interpretation": "Waterlogged; denitrification and root anoxia likely."}
+    ],
+    "qualitative_map": {
+      "very dry": "very_dry", "arid": "very_dry", "dry": "dry", "low": "dry",
+      "moderate": "adequate", "medium": "adequate", "adequate": "adequate",
+      "good": "adequate", "moist": "adequate", "high": "wet", "wet": "wet",
+      "waterlogged": "saturated", "saturated": "saturated", "flooded": "saturated"
+    }
+  },
+
+  "rainfall": {
+    "unit": "mm/yr",
+    "reference": "Aridity bands aligned with the UNEP aridity classification used in IPCC SRCCL Chapter 3 (hyper-arid, arid, semi-arid, dry sub-humid drylands).",
+    "source_id": "ipcc_srccl_2019",
+    "bands": [
+      {"class": "hyper_arid", "min": 0.0, "max": 100.0, "interpretation": "Desert; rainfed cropping not viable."},
+      {"class": "arid", "min": 100.0, "max": 300.0, "interpretation": "Arid; rainfed cropping highly marginal, water is the binding constraint."},
+      {"class": "semi_arid", "min": 300.0, "max": 600.0, "interpretation": "Semi-arid; rainfed cropping possible but drought risk dominates management."},
+      {"class": "dry_sub_humid", "min": 600.0, "max": 1000.0, "interpretation": "Dry sub-humid; moisture limiting in some seasons."},
+      {"class": "humid", "min": 1000.0, "max": 2000.0, "interpretation": "Humid; leaching and erosion are more likely constraints than drought."},
+      {"class": "very_humid", "min": 2000.0, "max": 20000.0, "interpretation": "Very high rainfall; nutrient leaching and acidification risk."}
+    ],
+    "qualitative_map": {
+      "very low": "arid", "low": "semi_arid", "scarce": "semi_arid",
+      "erratic": "semi_arid", "moderate": "dry_sub_humid", "medium": "dry_sub_humid",
+      "adequate": "dry_sub_humid", "good": "humid", "high": "humid",
+      "very high": "very_humid", "heavy": "very_humid", "monsoon": "humid"
+    }
+  },
+
+  "temperature": {
+    "unit": "degC",
+    "reference": "Mean annual air temperature bands used to set decomposition-rate and thermal-stress expectations.",
+    "source_id": "internal_reference",
+    "bands": [
+      {"class": "cold", "min": -40.0, "max": 5.0, "interpretation": "Decomposition strongly temperature-limited; organic matter accumulates."},
+      {"class": "cool_temperate", "min": 5.0, "max": 12.0, "interpretation": "Moderate decomposition; organic matter gains are relatively easy to retain."},
+      {"class": "warm_temperate", "min": 12.0, "max": 20.0, "interpretation": "Balanced decomposition and production."},
+      {"class": "warm", "min": 20.0, "max": 27.0, "interpretation": "Rapid mineralisation; organic carbon gains require sustained inputs."},
+      {"class": "hot", "min": 27.0, "max": 60.0, "interpretation": "Very rapid mineralisation and high evaporative demand; carbon gains hard to hold without shade or residue cover."}
+    ],
+    "qualitative_map": {
+      "cold": "cold", "cool": "cool_temperate", "mild": "warm_temperate",
+      "moderate": "warm_temperate", "warm": "warm", "hot": "hot", "very hot": "hot"
+    }
+  },
+
+  "species_richness": {
+    "unit": "species count (site-level, taxon-dependent)",
+    "reference": "Qualitative bands. Absolute richness is only interpretable against a local reference site, so the system treats these as relative classes and says so.",
+    "source_id": "internal_reference",
+    "bands": [
+      {"class": "very_low", "min": 0.0, "max": 5.0, "interpretation": "Depauperate; typical of intensive monoculture with no non-crop habitat."},
+      {"class": "low", "min": 5.0, "max": 15.0, "interpretation": "Impoverished relative to most managed landscapes."},
+      {"class": "moderate", "min": 15.0, "max": 40.0, "interpretation": "Typical of mixed farmland with some semi-natural elements."},
+      {"class": "high", "min": 40.0, "max": 100.0, "interpretation": "Diverse; substantial semi-natural habitat present."},
+      {"class": "very_high", "min": 100.0, "max": 100000.0, "interpretation": "Exceptional richness; likely includes near-natural habitat."}
+    ],
+    "qualitative_map": {
+      "very low": "very_low", "declining": "low", "low": "low", "poor": "low",
+      "moderate": "moderate", "medium": "moderate", "average": "moderate",
+      "high": "high", "good": "high", "rich": "high", "very high": "very_high"
+    }
+  },
+
+  "habitat_diversity": {
+    "unit": "distinct habitat patch types on or adjacent to the holding",
+    "reference": "Counts of distinct habitat types. Landscape ecology evidence indicates biodiversity benefits of semi-natural vegetation strengthen once it exceeds roughly 10-20% of the landscape.",
+    "source_id": "internal_reference",
+    "bands": [
+      {"class": "very_low", "min": 0.0, "max": 1.5, "interpretation": "Effectively a single habitat type; no refugia or complementary resources."},
+      {"class": "low", "min": 1.5, "max": 3.0, "interpretation": "Few habitat types; limited resource continuity through the season."},
+      {"class": "moderate", "min": 3.0, "max": 5.0, "interpretation": "Several habitat types; some structural complexity."},
+      {"class": "high", "min": 5.0, "max": 1000.0, "interpretation": "Structurally complex mosaic supporting varied life-history requirements."}
+    ],
+    "qualitative_map": {
+      "none": "very_low", "very low": "very_low", "uniform": "very_low",
+      "homogeneous": "very_low", "low": "low", "simple": "low",
+      "moderate": "moderate", "medium": "moderate", "mixed": "moderate",
+      "high": "high", "diverse": "high", "complex": "high", "mosaic": "high"
+    }
+  },
+
+  "pollution": {
+    "unit": "qualitative severity",
+    "reference": "Severity classes covering agrochemical, nutrient and industrial pressure.",
+    "source_id": "internal_reference",
+    "bands": [],
+    "qualitative_map": {
+      "none": "none", "negligible": "none", "clean": "none",
+      "low": "low", "minimal": "low", "slight": "low",
+      "moderate": "moderate", "medium": "moderate", "some": "moderate",
+      "high": "high", "heavy": "high", "severe": "high", "significant": "high",
+      "very high": "severe", "extreme": "severe", "severe pollution": "severe"
+    },
+    "class_interpretation": {
+      "none": "No reported chemical or nutrient pressure.",
+      "low": "Limited input use; unlikely to be the dominant biodiversity constraint.",
+      "moderate": "Routine agrochemical or nutrient loading; plausible suppression of invertebrate and soil fauna.",
+      "high": "Heavy chemical or nutrient loading; a likely primary driver of biodiversity loss that will cap gains from habitat measures.",
+      "severe": "Severe contamination; remediation is a precondition for any habitat intervention to work."
+    }
+  },
+
+  "deforestation": {
+    "unit": "qualitative severity or % tree cover loss",
+    "reference": "Severity classes for recent tree/woody cover loss on or around the holding.",
+    "source_id": "internal_reference",
+    "bands": [
+      {"class": "none", "min": 0.0, "max": 2.0, "interpretation": "No meaningful recent woody cover loss."},
+      {"class": "low", "min": 2.0, "max": 10.0, "interpretation": "Minor woody cover loss."},
+      {"class": "moderate", "min": 10.0, "max": 30.0, "interpretation": "Substantial loss; connectivity beginning to break down."},
+      {"class": "high", "min": 30.0, "max": 60.0, "interpretation": "Severe loss; habitat patches likely isolated."},
+      {"class": "severe", "min": 60.0, "max": 100.0, "interpretation": "Near-complete clearance; recolonisation sources probably absent."}
+    ],
+    "qualitative_map": {
+      "none": "none", "no": "none", "stable": "none",
+      "low": "low", "minor": "low", "slight": "low",
+      "moderate": "moderate", "some": "moderate", "ongoing": "moderate",
+      "high": "high", "heavy": "high", "extensive": "high", "significant": "high",
+      "severe": "severe", "complete": "severe", "cleared": "severe", "recent clearing": "high"
+    }
+  },
+
+  "land_use": {
+    "unit": "categorical land use / land cover class",
+    "reference": "Simplified classes mapped to IPCC land-use categories (cropland, grassland, forest land, wetlands, settlements, other land) as used in national greenhouse gas inventories.",
+    "source_id": "ipcc_srccl_2019",
+    "classes": {
+      "monoculture_cropland": {"ipcc_category": "Cropland", "woody_cover": "none", "structural_complexity": "very_low", "interpretation": "Single annual crop; minimal structural or temporal habitat heterogeneity."},
+      "rotational_cropland": {"ipcc_category": "Cropland", "woody_cover": "none", "structural_complexity": "low", "interpretation": "Rotated annual crops; some temporal diversity but little structural habitat."},
+      "mixed_cropland": {"ipcc_category": "Cropland", "woody_cover": "sparse", "structural_complexity": "moderate", "interpretation": "Multiple crops with some non-crop features."},
+      "agroforestry": {"ipcc_category": "Cropland", "woody_cover": "moderate", "structural_complexity": "high", "interpretation": "Trees integrated with crops; vertically structured habitat."},
+      "orchard_plantation": {"ipcc_category": "Cropland", "woody_cover": "high", "structural_complexity": "moderate", "interpretation": "Perennial woody crop, often with bare or mown understorey."},
+      "grazing_land": {"ipcc_category": "Grassland", "woody_cover": "sparse", "structural_complexity": "low", "interpretation": "Pasture or rangeland; condition depends heavily on stocking rate."},
+      "degraded_land": {"ipcc_category": "Other land", "woody_cover": "none", "structural_complexity": "very_low", "interpretation": "Bare or eroded land with little vegetation cover."},
+      "forest": {"ipcc_category": "Forest land", "woody_cover": "high", "structural_complexity": "high", "interpretation": "Closed or open forest."},
+      "wetland": {"ipcc_category": "Wetlands", "woody_cover": "variable", "structural_complexity": "high", "interpretation": "Permanently or seasonally inundated land."},
+      "fallow": {"ipcc_category": "Cropland", "woody_cover": "none", "structural_complexity": "low", "interpretation": "Rested cropland; successional vegetation may be present."},
+      "settlement": {"ipcc_category": "Settlements", "woody_cover": "variable", "structural_complexity": "low", "interpretation": "Built-up land."}
+    },
+    "qualitative_map": {
+      "monoculture": "monoculture_cropland", "monocrop": "monoculture_cropland",
+      "wheat": "monoculture_cropland", "rice": "monoculture_cropland",
+      "maize": "monoculture_cropland", "corn": "monoculture_cropland",
+      "cotton": "monoculture_cropland", "sugarcane": "monoculture_cropland",
+      "soy": "monoculture_cropland", "soybean": "monoculture_cropland",
+      "rotation": "rotational_cropland", "crop rotation": "rotational_cropland",
+      "mixed farming": "mixed_cropland", "mixed cropping": "mixed_cropland",
+      "intercropping": "mixed_cropland", "polyculture": "mixed_cropland",
+      "agroforestry": "agroforestry", "silvopasture": "agroforestry",
+      "alley cropping": "agroforestry", "orchard": "orchard_plantation",
+      "plantation": "orchard_plantation", "tea": "orchard_plantation",
+      "coffee": "orchard_plantation", "pasture": "grazing_land",
+      "grazing": "grazing_land", "rangeland": "grazing_land",
+      "grassland": "grazing_land", "livestock": "grazing_land",
+      "degraded": "degraded_land", "barren": "degraded_land",
+      "wasteland": "degraded_land", "eroded": "degraded_land",
+      "forest": "forest", "woodland": "forest", "plantation forest": "forest",
+      "wetland": "wetland", "marsh": "wetland", "mangrove": "wetland",
+      "fallow": "fallow", "urban": "settlement", "settlement": "settlement"
+    }
+  },
+
+  "climate_zone": {
+    "unit": "categorical",
+    "reference": "Derived from rainfall class when not supplied directly.",
+    "source_id": "ipcc_srccl_2019",
+    "qualitative_map": {
+      "arid": "arid", "desert": "hyper_arid", "semi arid": "semi_arid",
+      "semi-arid": "semi_arid", "semiarid": "semi_arid",
+      "sub humid": "dry_sub_humid", "sub-humid": "dry_sub_humid",
+      "dry sub-humid": "dry_sub_humid", "humid": "humid",
+      "tropical": "humid", "temperate": "dry_sub_humid",
+      "mediterranean": "semi_arid", "monsoon": "humid", "coastal": "humid"
+    }
+  }
+}

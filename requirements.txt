@@ -1,0 +1,13 @@
+# Core
+streamlit==1.64.0
+pydantic==2.13.5
+PyYAML==6.0.2
+
+# Knowledge layer / RAG
+chromadb==1.5.9
+rank-bm25==0.2.2
+scikit-learn==1.8.0
+numpy==2.4.4
+
+# Testing
+pytest==9.1.1

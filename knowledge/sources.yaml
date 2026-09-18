@@ -1,0 +1,162 @@
+# Source registry for the Darukaa.Earth biodiversity knowledge base.
+#
+# Every corpus file maps to exactly one entry here. Retrieval attaches this
+# metadata to each chunk, so every sentence the system outputs can be traced
+# back to a named document. Corpus files are factual summaries of these
+# sources written for retrieval; the quantitative findings they contain are
+# taken from the source, and readers are pointed to the original via `url`.
+
+sources:
+  - id: poeplau_don_2015
+    file: poeplau_don_2015.md
+    title: "Carbon sequestration in agricultural soils via cultivation of cover crops - A meta-analysis"
+    organisation: "Poeplau & Don, Agriculture, Ecosystems & Environment"
+    type: peer_reviewed_meta_analysis
+    year: 2015
+    url: "https://doi.org/10.1016/j.agee.2014.10.024"
+    citation: "Poeplau, C. & Don, A. (2015). Carbon sequestration in agricultural soils via cultivation of cover crops - A meta-analysis. Agriculture, Ecosystems & Environment, 200, 33-41."
+    topics: [soil_organic_carbon, cover_crops, cropland, sequestration_rate]
+    evidence_strength: high
+
+  - id: jian_2020
+    file: jian_2020.md
+    title: "A meta-analysis of global cropland soil carbon changes due to cover cropping"
+    organisation: "Jian et al., Soil Biology and Biochemistry"
+    type: peer_reviewed_meta_analysis
+    year: 2020
+    url: "https://doi.org/10.1016/j.soilbio.2020.107735"
+    citation: "Jian, J., Du, X., Reiter, M.S. & Stewart, R.D. (2020). A meta-analysis of global cropland soil carbon changes due to cover cropping. Soil Biology and Biochemistry, 143, 107735."
+    topics: [soil_organic_carbon, cover_crops, soil_texture, erosion, nitrogen]
+    evidence_strength: high
+
+  - id: beillouin_2021
+    file: beillouin_2021.md
+    title: "Positive but variable effects of crop diversification on biodiversity and ecosystem services"
+    organisation: "Beillouin et al., Global Change Biology"
+    type: peer_reviewed_meta_analysis
+    year: 2021
+    url: "https://doi.org/10.1111/gcb.15747"
+    citation: "Beillouin, D., Ben-Ari, T., Malezieux, E., Seufert, V. & Makowski, D. (2021). Positive but variable effects of crop diversification on biodiversity and ecosystem services. Global Change Biology, 27(19), 4697-4710."
+    topics: [biodiversity, crop_diversification, agroforestry, intercropping, rotation, cover_crops, ecosystem_services]
+    evidence_strength: high
+
+  - id: beillouin_2023_soc
+    file: beillouin_2023_soc.md
+    title: "A global meta-analysis of soil organic carbon in the Anthropocene"
+    organisation: "Beillouin et al., Nature Communications"
+    type: peer_reviewed_meta_analysis
+    year: 2023
+    url: "https://doi.org/10.1038/s41467-023-39338-z"
+    citation: "Beillouin, D. et al. (2023). A global meta-analysis of soil organic carbon in the Anthropocene. Nature Communications, 14, 3700."
+    topics: [soil_organic_carbon, land_use_change, deforestation, agroforestry, perennial_crops]
+    evidence_strength: high
+
+  - id: albrecht_2020
+    file: albrecht_2020.md
+    title: "The effectiveness of flower strips and hedgerows on pest control, pollination services and crop yield: a quantitative synthesis"
+    organisation: "Albrecht et al., Ecology Letters"
+    type: peer_reviewed_meta_analysis
+    year: 2020
+    url: "https://doi.org/10.1111/ele.13576"
+    citation: "Albrecht, M. et al. (2020). The effectiveness of flower strips and hedgerows on pest control, pollination services and crop yield: a quantitative synthesis. Ecology Letters, 23(10), 1488-1498."
+    topics: [pollinators, flower_strips, hedgerows, pest_control, habitat_diversity, field_margins]
+    evidence_strength: high
+
+  - id: kuyah_2019
+    file: kuyah_2019_agroforestry.md
+    title: "Agroforestry delivers a win-win solution for ecosystem services in sub-Saharan Africa: a meta-analysis"
+    organisation: "Kuyah et al., Agronomy for Sustainable Development"
+    type: peer_reviewed_meta_analysis
+    year: 2019
+    url: "https://doi.org/10.1007/s13593-019-0589-8"
+    citation: "Kuyah, S. et al. (2019). Agroforestry delivers a win-win solution for ecosystem services in sub-Saharan Africa. A meta-analysis. Agronomy for Sustainable Development, 39, 47."
+    topics: [agroforestry, runoff, soil_loss, soil_organic_carbon, yield, drylands]
+    evidence_strength: high
+
+  - id: ipcc_srccl_2019
+    file: ipcc_srccl_2019.md
+    title: "IPCC Special Report on Climate Change and Land (SRCCL)"
+    organisation: "Intergovernmental Panel on Climate Change"
+    type: assessment_report
+    year: 2019
+    url: "https://www.ipcc.ch/srccl/"
+    citation: "IPCC (2019). Climate Change and Land: an IPCC Special Report on climate change, desertification, land degradation, sustainable land management, food security, and greenhouse gas fluxes in terrestrial ecosystems."
+    topics: [drylands, desertification, land_degradation, soil_organic_carbon, agroforestry, erosion, temperature, response_options]
+    evidence_strength: high
+
+  - id: ipcc_ar6_wg2_2022
+    file: ipcc_ar6_wg2_2022.md
+    title: "IPCC Sixth Assessment Report, Working Group II: Impacts, Adaptation and Vulnerability"
+    organisation: "Intergovernmental Panel on Climate Change"
+    type: assessment_report
+    year: 2022
+    url: "https://www.ipcc.ch/report/ar6/wg2/"
+    citation: "IPCC (2022). Climate Change 2022: Impacts, Adaptation and Vulnerability. Contribution of Working Group II to the Sixth Assessment Report."
+    topics: [climate_change, drought, species_range_shift, connectivity, microclimate, adaptation, water_availability]
+    evidence_strength: high
+
+  - id: ipbes_2019
+    file: ipbes_2019.md
+    title: "IPBES Global Assessment Report on Biodiversity and Ecosystem Services - Summary for Policymakers"
+    organisation: "IPBES"
+    type: assessment_report
+    year: 2019
+    url: "https://doi.org/10.5281/zenodo.3553579"
+    citation: "IPBES (2019). Summary for policymakers of the global assessment report on biodiversity and ecosystem services. IPBES secretariat, Bonn."
+    topics: [biodiversity_loss, drivers, land_use_change, pollution, fragmentation, land_degradation, wetlands, pollinators]
+    evidence_strength: high
+
+  - id: ipbes_pollinators_2016
+    file: ipbes_pollinators_2016.md
+    title: "IPBES Assessment Report on Pollinators, Pollination and Food Production"
+    organisation: "IPBES"
+    type: assessment_report
+    year: 2016
+    url: "https://doi.org/10.5281/zenodo.3402856"
+    citation: "IPBES (2016). The assessment report on pollinators, pollination and food production. IPBES secretariat, Bonn."
+    topics: [pollinators, pesticides, pollution, floral_resources, nesting, habitat_loss]
+    evidence_strength: high
+
+  - id: fao_swsr_2015
+    file: fao_swsr_2015.md
+    title: "Status of the World's Soil Resources"
+    organisation: "FAO and ITPS"
+    type: assessment_report
+    year: 2015
+    url: "https://www.fao.org/documents/card/en/c/c6814873-efc3-41db-b7d3-2081a10ede50/"
+    citation: "FAO and ITPS (2015). Status of the World's Soil Resources (SWSR) - Main Report. Food and Agriculture Organization of the United Nations, Rome."
+    topics: [soil_threats, soil_organic_carbon, acidification, salinisation, soil_biodiversity, erosion]
+    evidence_strength: high
+
+  - id: fao_recsoil_2021
+    file: fao_recsoil_2021.md
+    title: "Recarbonizing global soils: a technical manual of recommended management practices"
+    organisation: "FAO"
+    type: technical_manual
+    year: 2021
+    url: "https://www.fao.org/documents/card/en/c/cb6386en"
+    citation: "FAO (2021). Recarbonizing global soils: A technical manual of recommended sustainable soil management. Food and Agriculture Organization of the United Nations, Rome."
+    topics: [soil_organic_carbon, legumes, residue_retention, drylands, water_harvesting, permanence, monitoring]
+    evidence_strength: high
+
+  - id: fao_soil_desc_2006
+    file: fao_soil_desc_2006.md
+    title: "Guidelines for Soil Description, 4th edition"
+    organisation: "FAO"
+    type: technical_guideline
+    year: 2006
+    url: "https://www.fao.org/documents/card/en/c/a0541e"
+    citation: "FAO (2006). Guidelines for Soil Description, 4th edition. Food and Agriculture Organization of the United Nations, Rome."
+    topics: [soil_ph, soil_description, nutrient_availability, aluminium_toxicity]
+    evidence_strength: high
+
+  - id: mechanism_notes
+    file: mechanism_notes.md
+    title: "Compiled mechanism notes: how environmental variables interact"
+    organisation: "Darukaa BioAI knowledge base (compiled synthesis)"
+    type: internal_synthesis
+    year: 2026
+    url: null
+    citation: "Darukaa BioAI (2026). Compiled mechanism notes synthesising causal links described in the indexed primary sources. Contains no independent empirical claims."
+    topics: [mechanisms, interactions, water_holding_capacity, soil_biodiversity, ph_gating, connectivity, microclimate, permanence]
+    evidence_strength: synthesis
