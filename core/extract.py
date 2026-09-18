@@ -65,12 +65,40 @@ NUMERIC_PATTERNS: List[Tuple[Metric, str, Optional[str]]] = [
 
 QUALITATIVE_CUES: Dict[Metric, Dict[str, str]] = {
     Metric.RAINFALL: {
-        "low rainfall": "low", "rainfall is low": "low", "little rain": "low",
-        "scarce rain": "low", "erratic rain": "erratic", "irregular rain": "erratic",
-        "poor rain": "low", "rainfall low": "low", "high rainfall": "high",
-        "heavy rain": "heavy", "good rain": "good", "moderate rain": "moderate",
-        "monsoon": "monsoon", "drought": "low", "dry season": "low",
-    },
+    "low rainfall": "low",
+    "rainfall is low": "low",
+    "rainfall low": "low",
+    "little rain": "low",
+    "little rainfall": "low",
+    "scarce rain": "low",
+    "scarce rainfall": "low",
+    "limited rainfall": "low",
+    "poor rain": "low",
+    "poor rainfall": "low",
+
+    "low precipitation": "low",
+    "scarce precipitation": "low",
+    "limited precipitation": "low",
+    "poor precipitation": "low",
+
+    "erratic rain": "erratic",
+    "irregular rain": "erratic",
+    "erratic rainfall": "erratic",
+    "irregular rainfall": "erratic",
+
+    "high rainfall": "high",
+    "high precipitation": "high",
+    "heavy rain": "heavy",
+    "heavy precipitation": "heavy",
+    "abundant rainfall": "high",
+    "abundant precipitation": "high",
+
+    "good rain": "good",
+    "moderate rain": "moderate",
+    "monsoon": "monsoon",
+    "drought": "low",
+    "dry season": "low",
+},
     Metric.SOIL_MOISTURE: {
         "soil is dry": "dry", "dry soil": "dry", "moisture is low": "dry",
         "low moisture": "dry", "waterlogged": "waterlogged", "saturated soil": "saturated",
@@ -131,6 +159,15 @@ QUALITATIVE_CUES: Dict[Metric, Dict[str, str]] = {
         "forest": "forest", "paddy": "rice", "wheat": "wheat", "rice": "rice",
         "maize": "maize", "corn": "corn", "cotton": "cotton", "sugarcane": "sugarcane",
         "tea": "tea", "coffee": "coffee", "soybean": "soybean",
+        "single-crop farming": "monoculture",
+        "single crop farming": "monoculture",
+        "continuous monocropping": "monoculture",
+        "continuous monoculture": "monoculture",
+        "repeatedly growing one crop": "monoculture",
+        "repeated growing of one crop": "monoculture",
+        "same crop every year": "monoculture",
+        "same crop year after year": "monoculture",
+        "same crop is planted year after year": "monoculture",
     },
     Metric.TEMPERATURE: {
         "very hot": "very hot", "hot climate": "hot", "hot summers": "hot",
@@ -190,6 +227,19 @@ def _normalise(text: str) -> str:
     t = t.replace("%", " % ").replace("_", " ")
     t = re.sub(r"[\u2013\u2014]", "-", t)
     return re.sub(r"\s+", " ", t)
+def _is_negated(text: str, phrase: str) -> bool:
+    """Return True when a cue is explicitly negated."""
+    pattern = rf"\b(?:not|no|never|without)\s+{re.escape(phrase)}\b"
+    if re.search(pattern, text):
+        return True
+
+    if " is " in phrase:
+        subject, predicate = phrase.split(" is ", 1)
+        pattern = rf"\b{re.escape(subject)}\s+is\s+not\s+{re.escape(predicate)}\b"
+        if re.search(pattern, text):
+            return True
+
+    return False
 
 
 def extract_from_text(text: str) -> List[Observation]:
@@ -228,14 +278,26 @@ def extract_from_text(text: str) -> List[Observation]:
     for metric, cues in QUALITATIVE_CUES.items():
         if metric in found:
             continue
+
         best: Optional[Tuple[str, str]] = None
+
         for phrase, normalised in cues.items():
-            if phrase in t and (best is None or len(phrase) > len(best[0])):
+            if phrase not in t:
+                continue
+
+            if _is_negated(t, phrase):
+                continue
+
+            if best is None or len(phrase) > len(best[0]):
                 best = (phrase, normalised)
+
         if best:
             found[metric] = Observation(
-                metric=metric, raw=best[0], category=best[1], source="user"
-            )
+            metric=metric,
+            raw=best[0],
+            category=best[1],
+            source="user",
+        )
 
     # 3. Region
     if Metric.REGION not in found:
@@ -247,16 +309,7 @@ def extract_from_text(text: str) -> List[Observation]:
                 break
 
     # 4. Climate zone implies a rainfall regime when rainfall is absent
-    if Metric.RAINFALL not in found and Metric.CLIMATE_ZONE in found:
-        zone = found[Metric.CLIMATE_ZONE].category
-        implied = {"arid": "very low", "semi-arid": "low", "desert": "very low",
-                   "humid": "high", "tropical": "high", "monsoon": "high"}.get(zone or "")
-        if implied:
-            found[Metric.RAINFALL] = Observation(
-                metric=Metric.RAINFALL, raw=f"implied by '{zone}' climate",
-                category=implied, source="default_assumption",
-            )
-
+    
     # 5. Disambiguation: "we cleared the forest" mentions forest but the land is
     # no longer forest. Drop the land-use reading rather than guess wrongly.
     if (
